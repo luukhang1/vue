@@ -1,3 +1,4 @@
+
 <template>
   <div class="container">
     <h1>{{ msg }}</h1>
@@ -17,6 +18,7 @@
             <button class="btn-default" @click="addItem">Add</button>
             <button  class="btn-default" @click="removeItem(ngoc.id)">Delete</button>
             <button  class="btn-default" @click="openEditModel(ngoc)">Edit</button>
+            <button  class="btn-default" @click="getPrice">CheckPrice</button>
           </td>
         </tr>
       </table>
@@ -27,21 +29,92 @@
         @close="close"
         @save="saveData"
     />
+<!--    <div v-if="isLoader">-->
+<!--      <Loader/>-->
+<!--    </div>-->
+    <div>
+      <div v-if="dataCheckprice.message ==='success'"  style="display: -webkit-box; background-color: #fff; border-radius: 3px; border-bottom: 1px solid #9d9b9b; margin-left: 40%; margin-right: 40%">
+        <div v-if="isLoader" style="display: -webkit-box">
+          <img :src='dataCheckprice.image' style="margin-top: 16%;"/>
+          <Loader/>
+        </div>
+        <div v-else style="display: -webkit-box;" >
+          <input type="radio">
+          <img :src='dataCheckprice.image' />
+          <p>{{dataCheckprice.description}}</p>
+          <p style="font-size: 1.2rem;
+          font-weight: 900;
+          color: #0090DA;
+          cursor: pointer;"
+          >{{dataCheckprice.totalPrice}}</p>
+        </div>
+        </div>
+
+    </div>
+    <div v-if="!isShowSender" style="background-color: #fff; position: absolute; top: 320px; width: 500px;margin-left: 10px;height: 30px;border-radius: 3px;" @click.prevent="getList">
+      <p >{{senderDefault.name}}-{{senderDefault.ward}}</p>
+    </div>
+    <div v-else style="margin-bottom: 10px; position: absolute; top: 320px;">
+      <Sender
+          :list-sender="listSender"
+          :is-show-sender="isShowSender"
+          @updateShowSender="updateShowSender"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import Editmodel from "@/components/editModel";
+import Editmodel from "@/components/editModel.vue";
+import Loader from "@/components/loader/Loader.vue";
+import GetPrice from "@/components/Api/GetPrice.js";
+import Sender from "@/components/Sender";
 export default {
   name: 'HelloWorld',
-  components: {Editmodel},
+  components: {Sender, Loader, Editmodel},
   props: {
     msg: String
   },
+
   data(){
     return {
+      isLoader: false,
       ishow: false,
       datas: Object,
+      dataCheckprice: Array,
+      isShowSender : false,
+      senderDefault :  {
+        'id' : 34,
+        'name': 'Ha Noi',
+        'ward': 'phung khoang'
+      },
+      listSender: [
+        {
+          'id' : 34,
+          'name': 'Ha Noi',
+          'ward': 'Ho Hoan Kiem'
+        },
+        {
+          'id' : 34,
+          'name': 'Ha Noi',
+          'ward': 'Nam Tu Liem'
+        },
+        {
+          'id' : 34,
+          'name': 'Ha Noi',
+          'ward': 'Bac Tu Liem'
+        },
+        {
+          'id' : 34,
+          'name': 'Ha Noi',
+          'ward': 'phung khoang'
+        },
+        {
+          'id' : 34,
+          'name': 'Ha Noi',
+          'ward': 'Ha Dong'
+        },
+      ],
       ngocs: [
         {
           'id' : 1,
@@ -57,6 +130,35 @@ export default {
     }
   },
   methods: {
+    updateShowSender(value,sender){
+      this.isShowSender=value
+      this.senderDefault = sender
+      this.$forceUpdate()
+    },
+    getList() {
+      this.isShowSender = true
+    },
+     async getPrice() {
+       this.isLoader= true
+       // setTimeout(()=>{
+       //
+       // },1000)
+       let dataCheckPrice = await  GetPrice.getPrice().then(
+           (res) => {
+             return res.data
+           }
+       ).catch((err) =>{
+         return err
+       })
+       setTimeout(() =>{
+         this.isLoader= false
+       },1500)
+
+       this.dataCheckprice = dataCheckPrice
+
+
+       console.log(dataCheckPrice,"sssssss")
+    },
     saveData(data) {
       const index = this.ngocs.findIndex(function (e){
         return e.id == data.id
@@ -81,11 +183,16 @@ export default {
 
     },
     addItem(){
-      this.ngocs.push({
-        'id' : 3,
-        'name': 'long',
-        'title': 'kaka'
-      });
+      this.isLoader= true
+      setTimeout(()=>{
+        this.ngocs.push({
+          'id' : 3,
+          'name': 'long',
+          'title': 'kaka'
+        })
+        this.isLoader= false
+      },1000)
+
     },
     removeItem(id){
       // eslint-disable-next-line no-unused-vars
@@ -97,12 +204,18 @@ export default {
       }
       // eslint-disable-next-line no-console
     }
-  }
+  },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+p{
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
 .btn-default{
   border: 1px solid black;
   width: 100px;

@@ -1,16 +1,16 @@
 <template>
   <div id="loader-5">
-  <div id="loader-4">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+    <div id="loader-4">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Loader',
+  name: 'loader1',
   data() {
     return {}
   },
@@ -18,20 +18,22 @@ export default {
 </script>
 
 <style scoped>
-/*#loader-5 {*/
-/*  //position: fixed;*/
-/*  top: 0;*/
-/*  left: 0;*/
-/*  width: 100%;*/
-/*  text-align: center;*/
-/*  height: 100%;*/
-/*  background-color: rgb(0,0,0,0.5);*/
-/*}*/
-#loader-4 {
-  position: relative;
+#loader-5 {
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
   width: 100%;
   text-align: center;
-  /*height: 30px;*/
+  height: 100%;
+  background-color: rgb(0,0,0,0.5);
+}
+#loader-4 {
+  position: relative;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  height: 30px;
   align-self: center;
 }
 

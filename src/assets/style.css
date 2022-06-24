@@ -1,3 +1,31 @@
+.reset{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+    border-radius: 3px;
+}
+*{
+    box-sizing: border-box;
+}
+.btn{
+    width: 120px;
+    height: 30px;
+    margin: 20px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+.btn-primary{
+    background-color: #0090DA;
+}
+.btn-success{
+    background-color: #42b983;
+}
 .loader {
     border: 16px solid #f3f3f3;
     border-radius: 50%;
@@ -9,6 +37,7 @@
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
 }
+
 
 @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
